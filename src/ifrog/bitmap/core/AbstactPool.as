@@ -9,7 +9,7 @@ package ifrog.bitmap.core
 	 * @author Larry H.
 	 * @createTime 2012/5/23 20:23
 	 */
-	internal class AbstactPool 
+	public class AbstactPool 
 	{
 		private var _name:String;
 		

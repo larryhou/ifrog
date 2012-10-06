@@ -10,7 +10,7 @@ package ifrog.bitmap.core
 	 * @author Larry H.
 	 * @createTime 2012/5/23 11:08
 	 */
-	internal class RenderHelper 
+	public class RenderHelper 
 	{
 		private static const _helper:Sprite = new Sprite();
 		private static const _map:Dictionary = new Dictionary(false);
