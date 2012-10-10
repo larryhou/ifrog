@@ -170,6 +170,28 @@ package ifrog.bitmap
 				super.smoothing = _smoothing;
 			}
 			
+			positionUpdate();
+		}
+		
+		/**
+		 * 更新位图坐标
+		 */		
+		private function positionUpdate():void
+		{
+			if(!_frames || _frames.length <= _currentFrame) return;
+			
+			var info:FrameInfo = _frames[_currentFrame - 1];
+			if(!info) return;
+			
+			// 分类进行位置调整，效率优化
+			if(!this.scaleX && !this.scaleY)
+			{
+				super.x = _offsetX - info.x;
+				super.y = _offsetY - info.y;
+				
+				return;
+			}
+			
 			var pivot:Point = new Point(info.x * this.scaleX, info.y * this.scaleY);
 			
 			if(this.rotation)
@@ -280,8 +302,8 @@ package ifrog.bitmap
 		override public function get x():Number { return _offsetX; }
 		override public function set x(value:Number):void 
 		{
-			_offsetX = value;	
-			gotoAndStop(_currentFrame);
+			_offsetX = value;
+			positionUpdate();
 		}
 		
 		/**
@@ -291,14 +313,25 @@ package ifrog.bitmap
 		override public function set y(value:Number):void 
 		{
 			_offsetY = value;
-			gotoAndStop(_currentFrame);
+			positionUpdate();
 		}
 		
 		override public function set scaleX(value:Number):void
 		{
 			super.scaleX = value;
-			
-			this.x = this.x;
+			positionUpdate();
+		}
+		
+		override public function set scaleY(value:Number):void
+		{
+			super.scaleY = value;
+			positionUpdate();
+		}
+		
+		override public function set rotation(value:Number):void
+		{
+			super.rotation = value;
+			positionUpdate();
 		}
 		
 		/**
