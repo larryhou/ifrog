@@ -63,7 +63,7 @@ package ifrog.bitmap
 			_width = _height = 0;
 			_offsetX = _offsetY = 0;
 			
-			this.frameRate = 12;
+			this.frameRate = 24;
 			this.frames = frames;
 		}
 		
