@@ -276,11 +276,17 @@ package ifrog.bitmap
 			var bounds:Rectangle = new Rectangle();
 			for each(var fr:FrameInfo in _frames)
 			{
-				if (fr) bounds = bounds.union(fr.data.rect);
+				if(fr)
+				{
+					if(fr.label) _map[fr.label] = fr.index;
+					bounds = bounds.union(fr.data.rect);
+				}
 			}
 			
 			_width = bounds.width;
 			_height = bounds.height;
+			
+			gotoAndStop(1);
 		}
 		
 		/**

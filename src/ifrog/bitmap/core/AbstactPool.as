@@ -74,7 +74,10 @@ package ifrog.bitmap.core
 			if (!target) return map;
 			
 			var scene:Scene = target.scenes[0];
-			for each(var frame:FrameLabel in scene) map[frame.frame] = frame.name;
+			for each(var frame:FrameLabel in scene.labels)
+			{
+				map[frame.frame] = frame.name;
+			}
 			return map;
 		}
 		
