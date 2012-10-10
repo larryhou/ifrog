@@ -5,6 +5,7 @@ package ifrog.bitmap
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	
 	import ifrog.bitmap.core.AbstactPool;
 	import ifrog.bitmap.core.FrameInfo;
 	
@@ -45,32 +46,28 @@ package ifrog.bitmap
 			var container:Sprite = new Sprite();
 			if (!target.parent) container.addChild(target);
 			
-			var info:FrameInfo, index:int;
-			var viewport:Rectangle = new Rectangle();
-			for (index = 1; index <= totalFrames; index++)
+			var info:FrameInfo, bounds:Rectangle;
+			for (var index:int = 1; index <= totalFrames; index++)
 			{
 				target.gotoAndStop(index);
-				viewport = viewport.union(target.getBounds(target.parent));
-			}
-			
-			// 防抖、像素对齐优化
-			viewport.width = Math.ceil(viewport.width + viewport.x - (viewport.x >> 0));
-			viewport.height = Math.ceil(viewport.height + viewport.y - (viewport.y >> 0));
-			viewport.x >>= 0; viewport.y >>= 0;
-			
-			// 读取原生matrix, 适应任何变形对象
-			matrix = target.transform.matrix;
-			matrix.tx = -viewport.x + target.x;
-			matrix.ty = -viewport.y + target.y;
-			
-			for (index = 1; index <= totalFrames; index++)
-			{
-				target.gotoAndStop(index);
+				
+				// 获取有效像素边框
+				bounds = target.getBounds(target.parent);
+				
+				// 防抖、像素对齐优化
+				bounds.width = Math.ceil(bounds.width + bounds.x - (bounds.x >> 0));
+				bounds.height = Math.ceil(bounds.height + bounds.y - (bounds.y >> 0));
+				bounds.x >>= 0; bounds.y >>= 0;
+				
+				// 读取原生matrix, 适应任何变形对象
+				matrix = target.transform.matrix;
+				matrix.tx = -bounds.x + target.x;
+				matrix.ty = -bounds.y + target.y;
 				
 				info = new FrameInfo(matrix.tx, matrix.ty, data);
 				info.label = dict[index];
 				
-				data = new BitmapData(Math.max(viewport.width, 1), Math.max(viewport.height, 1), true, 0);
+				data = new BitmapData(Math.max(bounds.width, 1), Math.max(bounds.height, 1), true, 0);
 				data.draw(target, matrix, null, null, null, true);
 				
 				info.data = data;
