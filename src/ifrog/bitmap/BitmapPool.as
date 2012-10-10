@@ -9,8 +9,6 @@ package ifrog.bitmap
 	import ifrog.bitmap.core.AbstactPool;
 	import ifrog.bitmap.core.FrameInfo;
 	
-	import mx.core.IFlexAsset;
-	
 	/**
 	 * 位图池
 	 * @notice	之所以没有做成静态类，是为了bitmap动画分类管理
