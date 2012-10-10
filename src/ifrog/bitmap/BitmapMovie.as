@@ -1,14 +1,17 @@
 package ifrog.bitmap
 {
-	import flash.display.BitmapData;
 	import flash.display.Bitmap;
-	import flash.geom.Rectangle;
-	
-	import flash.utils.Dictionary;
+	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
+	
 	import ifrog.bitmap.core.FrameInfo;
 	import ifrog.bitmap.core.IAdvance;
 	import ifrog.bitmap.core.RenderHelper;
+	
+	import mx.core.IFlexAsset;
 	
 	/**
 	 * 单次循环播放完成时派发
@@ -167,8 +170,22 @@ package ifrog.bitmap
 				super.smoothing = _smoothing;
 			}
 			
-			super.x = _offsetX - info.x;
-			super.y = _offsetY - info.y;
+			var pivot:Point = new Point(info.x * this.scaleX, info.y * this.scaleY);
+			
+			if(this.rotation)
+			{
+				var rot:Number = this.rotation / 180 * Math.PI;			
+				var slop:Number = Math.atan2(pivot.y, pivot.x);
+				var radius:Number = pivot.length;
+				
+				super.x = _offsetX - pivot.x - radius * (Math.cos(slop + rot) - Math.cos(slop));
+				super.y = _offsetY - pivot.y - radius * (Math.sin(slop + rot) - Math.sin(slop));
+			}
+			else
+			{
+				super.x = _offsetX - pivot.x;
+				super.y = _offsetY - pivot.y;
+			}
 		}
 		
 		/**
@@ -275,6 +292,13 @@ package ifrog.bitmap
 		{
 			_offsetY = value;
 			gotoAndStop(_currentFrame);
+		}
+		
+		override public function set scaleX(value:Number):void
+		{
+			super.scaleX = value;
+			
+			this.x = this.x;
 		}
 		
 		/**
