@@ -73,7 +73,7 @@ package ifrog.bitmap
 			var frame:int = _currentFrame + step;
 			if (frame > _totalFrames)
 			{
-				frame = 1;
+				frame = frame % _totalFrames;
 				_numloop++;
 				
 				dispatchEvent(new Event(Event.CHANGE, true));
@@ -83,6 +83,7 @@ package ifrog.bitmap
 					stop();
 					dispatchEvent(new Event(Event.COMPLETE, true));
 				}
+				
 			}
 			
 			gotoAndStop(frame);
@@ -178,7 +179,7 @@ package ifrog.bitmap
 		 */		
 		private function positionUpdate():void
 		{
-			if(!_frames || _frames.length <= _currentFrame) return;
+			if(!_frames || _frames.length < _currentFrame) return;
 			
 			var info:FrameInfo = _frames[_currentFrame - 1];
 			if(!info) return;

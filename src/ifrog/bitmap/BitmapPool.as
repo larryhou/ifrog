@@ -9,6 +9,8 @@ package ifrog.bitmap
 	import ifrog.bitmap.core.AbstactPool;
 	import ifrog.bitmap.core.FrameInfo;
 	
+	import mx.core.IFlexAsset;
+	
 	/**
 	 * 位图池
 	 * @notice	之所以没有做成静态类，是为了bitmap动画分类管理
@@ -66,6 +68,7 @@ package ifrog.bitmap
 				
 				info = new FrameInfo(matrix.tx, matrix.ty, data);
 				info.label = dict[index];
+				info.index = index;
 				
 				data = new BitmapData(Math.max(bounds.width, 1), Math.max(bounds.height, 1), true, 0);
 				data.draw(target, matrix, null, null, null, true);

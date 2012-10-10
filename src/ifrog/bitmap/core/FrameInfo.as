@@ -25,9 +25,6 @@ package ifrog.bitmap.core
 		// 帧数据
 		public var data:BitmapData;
 		
-		// 与第一帧的偏移
-		public var offset:Point;
-		
 		/**
 		 * 构造函数
 		 * create a [FrameInfo] object
