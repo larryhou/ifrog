@@ -11,8 +11,6 @@ package ifrog.bitmap
 	import ifrog.bitmap.core.IAdvance;
 	import ifrog.bitmap.core.RenderHelper;
 	
-	import mx.core.IFlexAsset;
-	
 	/**
 	 * 单次循环播放完成时派发
 	 */
