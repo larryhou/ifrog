@@ -71,9 +71,9 @@ package ifrog.bitmap
 			var frame:int = _currentFrame + step;
 			if (frame > _totalFrames)
 			{
-				frame = frame % _totalFrames;
 				_numloop++;
 				
+				frame %= _totalFrames;
 				dispatchEvent(new Event(Event.CHANGE, true));
 				
 				if (_numloop >= _loop && _loop > 0)
@@ -159,7 +159,7 @@ package ifrog.bitmap
 			if (frame is String) frame = _map[frame];
 			_currentFrame = Math.min(Math.max(int(frame), 1), _totalFrames);
 			
-			var info:FrameInfo = _frames[_currentFrame - 1];
+			var info:FrameInfo = _frames.length? _frames[_currentFrame - 1] : null;
 			if (!info) return;
 			
 			// 效率优化
@@ -265,7 +265,6 @@ package ifrog.bitmap
 		{
 			_frames = value || new Vector.<FrameInfo>;
 			
-			_currentFrame = 1;
 			_totalFrames = _frames.length;
 			
 			_map = new Dictionary(false);
@@ -274,11 +273,10 @@ package ifrog.bitmap
 			var bounds:Rectangle = new Rectangle();
 			for each(var fr:FrameInfo in _frames)
 			{
-				if(fr)
-				{
-					if(fr.label) _map[fr.label] = fr.index;
-					bounds = bounds.union(fr.data.rect);
-				}
+				if(!fr) continue;
+				
+				bounds = bounds.union(fr.data.rect);
+				if(fr.label) _map[fr.label] = fr.index;
 			}
 			
 			_width = bounds.width;
@@ -362,18 +360,10 @@ package ifrog.bitmap
 		 * @notice	
 		 */
 		override public function get width():Number { return _width? _width : super.width; }
-		override public function set width(value:Number):void 
-		{
-			_width = Math.max(value, 0);
-		}
 		
 		/**
 		 * 影片高度
 		 */
 		override public function get height():Number { return _height? _height : super.height; }
-		override public function set height(value:Number):void 
-		{
-			_height = Math.max(value, 0);
-		}
 	}
 }
