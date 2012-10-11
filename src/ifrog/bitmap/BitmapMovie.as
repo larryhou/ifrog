@@ -321,18 +321,27 @@ package ifrog.bitmap
 			positionUpdate();
 		}
 		
+		/**
+		 * 添加横向变形支持
+		 */		
 		override public function set scaleX(value:Number):void
 		{
 			super.scaleX = value;
 			positionUpdate();
 		}
 		
+		/**
+		 * 添加竖向变形支持
+		 */		
 		override public function set scaleY(value:Number):void
 		{
 			super.scaleY = value;
 			positionUpdate();
 		}
 		
+		/**
+		 * 添加旋转变形支持
+		 */		
 		override public function set rotation(value:Number):void
 		{
 			super.rotation = value;
