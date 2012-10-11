@@ -1,9 +1,11 @@
 package ifrog.bitmap
 {
-	import flash.display.*;
+	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	import flash.utils.Dictionary;
 	
 	import ifrog.bitmap.core.AbstactPool;
 	import ifrog.bitmap.core.FrameInfo;

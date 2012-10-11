@@ -1,6 +1,10 @@
 package ifrog.bitmap.core
 {
-	import flash.display.*;
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	import flash.display.FrameLabel;
+	import flash.display.MovieClip;
+	import flash.display.Scene;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -50,9 +54,13 @@ package ifrog.bitmap.core
 				map[key] = _map[key];
 			}
 			
-			for(var key:String in map)
+			for(key in map)
 			{
 				frames = map[key];
+				
+				if(!frames) continue;
+				frames.fixed = false;
+				
 				while (frames.length > 0)
 				{
 					info = frames.pop();

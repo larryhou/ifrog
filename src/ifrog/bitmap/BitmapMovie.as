@@ -150,11 +150,15 @@ package ifrog.bitmap
 		 */
 		public function gotoAndStop(frame:Object):void
 		{
+			if(!_frames) return;
+			
 			// 运行时draw需要动态更新总帧
 			if (_totalFrames != _frames.length)
 			{
 				_totalFrames = _frames.length;
 			}
+			
+			!_frames.length && stop();
 			
 			if (frame is String) frame = _map[frame];
 			_currentFrame = Math.min(Math.max(int(frame), 1), _totalFrames);
@@ -177,7 +181,7 @@ package ifrog.bitmap
 		 */		
 		private function positionUpdate():void
 		{
-			if(!_frames || _frames.length < _currentFrame) return;
+			if(!_frames || _currentFrame <= 0 || _frames.length < _currentFrame) return;
 			
 			var info:FrameInfo = _frames[_currentFrame - 1];
 			if(!info) return;

@@ -1,7 +1,6 @@
 package ifrog.bitmap.core
 {
 	import flash.display.BitmapData;
-	import flash.geom.Point;
 	
 	/**
 	 * 位图帧
