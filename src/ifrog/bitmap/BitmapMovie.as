@@ -150,8 +150,6 @@ package ifrog.bitmap
 		 */
 		public function gotoAndStop(frame:Object):void
 		{
-			if(!_frames) return;
-			
 			// 运行时draw需要动态更新总帧
 			if (_totalFrames != _frames.length)
 			{
