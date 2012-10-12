@@ -11,6 +11,8 @@ package ifrog.bitmap
 	import ifrog.bitmap.core.IAdvance;
 	import ifrog.bitmap.core.RenderHelper;
 	
+	import org.hamcrest.object.nullValue;
+	
 	/**
 	 * 单次循环播放完成时派发
 	 */
@@ -156,7 +158,10 @@ package ifrog.bitmap
 				_totalFrames = _frames.length;
 			}
 			
-			!_frames.length && stop();
+			if(!_frames.length)
+			{
+				stop(); super.bitmapData = null;
+			}
 			
 			if (frame is String) frame = _map[frame];
 			_currentFrame = Math.min(Math.max(int(frame), 1), _totalFrames);
