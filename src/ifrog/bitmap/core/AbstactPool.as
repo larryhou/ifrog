@@ -40,9 +40,10 @@ package ifrog.bitmap.core
 		
 		/**
 		 * 释放内存
-		 * @param	key	释放内存，如果key不为空则只释放对应的位图数据
+		 * @param	key	动画对应键值，若key为null则释放所有动画内存
+		 * @param	exceptions	添加例外，该列表中key对应的动画不会被内存释放
 		 */
-		public function dispose(key:String = null):void
+		public function dispose(key:String = null, exceptions:Array = null):void
 		{
 			var info:FrameInfo;
 			var frames:Vector.<FrameInfo>;
@@ -54,16 +55,22 @@ package ifrog.bitmap.core
 				map[key] = _map[key];
 			}
 			
-			for(key in map)
+			// 制作特例映射表，Array是个dynamic类
+			exceptions = exceptions? exceptions.concat() : [];
+			for each(key in exceptions) exceptions[key] = true;
+			
+			for (key in map)
 			{
 				frames = map[key];
+				if (exceptions[key] || !frames) continue;
 				
-				if(!frames) continue;
+				// 解除数组长度锁定
 				frames.fixed = false;
-				
-				while (frames.length > 0)
+				while (frames.length)
 				{
 					info = frames.pop();
+					if (!info) continue;
+					
 					info.data && info.data.dispose();
 					info.data = null;
 				}
