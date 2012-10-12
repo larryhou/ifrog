@@ -97,6 +97,7 @@ package ifrog.bitmap
 				
 				// 获取目标位图数据
 				data.draw(target, matrix, null, null, null, true);
+				data.lock();
 				
 				item.frames[item.currentFrame - 1] = info;
 				if (item.currentFrame >= item.totalFrames)

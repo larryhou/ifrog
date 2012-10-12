@@ -71,6 +71,7 @@ package ifrog.bitmap
 				
 				data = new BitmapData(Math.max(bounds.width, 1), Math.max(bounds.height, 1), true, 0);
 				data.draw(target, matrix, null, null, null, true);
+				data.lock();
 				
 				info.data = data;
 				frames[index - 1] = info;
