@@ -57,12 +57,12 @@ package ifrog.bitmap.core
 			
 			// 制作特例映射表，Array是个dynamic类
 			exceptions = exceptions? exceptions.concat() : [];
-			while(exceptions.length) exceptions[String(exceptions.shift())] = true;
+			while(exceptions.length) exceptions["#" + exceptions.shift()] = true;
 			
 			for (key in map)
 			{
 				frames = map[key];
-				if (exceptions[key] || !frames) continue;
+				if (exceptions["#" + key] || !frames) continue;
 				
 				// 解除数组长度锁定
 				frames.fixed = false;
