@@ -39,13 +39,14 @@ package ifrog.bitmap
 		 * @param	totalFrames	指定绘制异步帧数
 		 * @param	key			缓存键值，pool范围内唯一存在
 		 * @param	callback	当所有的缓存制作完成后派发，传参Vector.<FrameInfo>
+		 * @param	skip		跳帧DRAW，默认不跳帧，首位两帧不被跳帧
 		 * @return
 		 */
-		public function process(target:DisplayObject, totalFrames:int, key:String, callback:Function = null):Vector.<FrameInfo>
+		public function process(target:DisplayObject, totalFrames:int, key:String, callback:Function = null, skip:uint = 0):Vector.<FrameInfo>
 		{
 			if (_map[key]) return _map[key] as Vector.<FrameInfo>;
 			
-			var item:RTItem = new RTItem(target, totalFrames, key, callback);
+			var item:RTItem = new RTItem(target, totalFrames, key, callback, skip);
 			item.map = createLabelMap(target as MovieClip);
 			
 			_queue.push(item);
@@ -73,6 +74,12 @@ package ifrog.bitmap
 			for (var i:int = 0; i < _queue.length; i++)
 			{
 				item = _queue[i];
+				
+				if(item.currentFrame % item.skip > 0 && item.currentFrame != item.totalFrames - 1)
+				{
+					item.currentFrame++; continue;
+				}
+				
 				target = item.target;
 				
 				if (!target.parent) container.addChild(target);
@@ -138,6 +145,7 @@ class RTItem
 	public var target:DisplayObject;
 	public var frames:Vector.<FrameInfo>;
 	
+	public var skip:uint;
 	public var totalFrames:int;
 	public var currentFrame:int;
 	
@@ -145,12 +153,13 @@ class RTItem
 	public var callback:Function;
 	
 	// 绘制对象
-	public function RTItem(target:DisplayObject, totalFrames:int, key:String, callback:Function)
+	public function RTItem(target:DisplayObject, totalFrames:int, key:String, callback:Function, skip:uint = 0)
 	{
 		this.key = key;
 		this.target = target;
 		this.totalFrames = totalFrames;
 		this.frames = new Vector.<FrameInfo>(totalFrames, true);
+		this.skip = Math.max(1, Math.min(totalFrames, skip)) + 1;
 		this.callback = callback;
 	}
 	

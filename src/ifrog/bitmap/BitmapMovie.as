@@ -36,6 +36,8 @@ package ifrog.bitmap
 		
 		private var _playing:Boolean;
 		
+		private var _buffer:FrameInfo;
+		
 		private var _totalFrames:uint;
 		private var _currentFrame:uint;
 		
@@ -158,7 +160,7 @@ package ifrog.bitmap
 			
 			if(!_frames.length)
 			{
-				stop(); super.bitmapData = null;
+				stop(); super.bitmapData = null; _buffer = null;
 			}
 			
 			if (frame is String) frame = _map[frame];
@@ -166,6 +168,8 @@ package ifrog.bitmap
 			
 			var info:FrameInfo = _frames.length? _frames[_currentFrame - 1] : null;
 			if (!info) return;
+			
+			_buffer = info;
 			
 			// 效率优化
 			if(super.bitmapData != info.data)
@@ -182,21 +186,18 @@ package ifrog.bitmap
 		 */		
 		private function positionUpdate():void
 		{
-			if(!_frames || _currentFrame <= 0 || _frames.length < _currentFrame) return;
-			
-			var info:FrameInfo = _frames[_currentFrame - 1];
-			if(!info) return;
+			if(!_buffer) return;
 			
 			// 分类进行位置调整，效率优化
 			if(!this.scaleX && !this.scaleY)
 			{
-				super.x = _offsetX - info.x;
-				super.y = _offsetY - info.y;
+				super.x = _offsetX - _buffer.x;
+				super.y = _offsetY - _buffer.y;
 				
 				return;
 			}
 			
-			var pivot:Point = new Point(info.x * this.scaleX, info.y * this.scaleY);
+			var pivot:Point = new Point(_buffer.x * this.scaleX, _buffer.y * this.scaleY);
 			
 			if(this.rotation)
 			{
@@ -287,6 +288,7 @@ package ifrog.bitmap
 			_width = bounds.width;
 			_height = bounds.height;
 			
+			_buffer = null;
 			gotoAndStop(1);
 		}
 		

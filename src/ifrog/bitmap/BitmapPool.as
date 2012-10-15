@@ -32,14 +32,17 @@ package ifrog.bitmap
 		 * 处理影片剪辑
 		 * @param	target	影片剪辑
 		 * @param	key		缓存键值，pool范围内唯一存在
+		 * @param	skip	跳帧DRAW，默认不跳帧，首位两帧不被跳帧
 		 * @return
 		 */
-		public function process(target:MovieClip, key:String):Vector.<FrameInfo>
+		public function process(target:MovieClip, key:String, skip:uint = 0):Vector.<FrameInfo>
 		{
 			if (!target) return null;
 			if (_map[key]) return _map[key] as Vector.<FrameInfo>;
 			
 			var totalFrames:int = target.totalFrames;
+			skip = Math.max(1, Math.min(totalFrames, skip)) + 1;
+			
 			var dict:Dictionary = createLabelMap(target);
 			var frames:Vector.<FrameInfo> = new Vector.<FrameInfo>(totalFrames, true);
 			
@@ -50,31 +53,33 @@ package ifrog.bitmap
 			var info:FrameInfo, bounds:Rectangle;
 			for (var index:int = 1; index <= totalFrames; index++)
 			{
-				target.gotoAndStop(index);
-				
-				// 获取有效像素边框
-				bounds = target.getBounds(target.parent);
-				
-				// 防抖、像素对齐优化
-				bounds.width = Math.ceil(bounds.width + bounds.x - (bounds.x >> 0));
-				bounds.height = Math.ceil(bounds.height + bounds.y - (bounds.y >> 0));
-				bounds.x >>= 0; bounds.y >>= 0;
-				
-				// 读取原生matrix, 适应任何变形对象
-				matrix = target.transform.matrix;
-				matrix.tx = -bounds.x + target.x;
-				matrix.ty = -bounds.y + target.y;
-				
-				info = new FrameInfo(matrix.tx, matrix.ty, data);
-				info.label = dict[index];
-				info.index = index;
-				
-				data = new BitmapData(Math.max(bounds.width, 1), Math.max(bounds.height, 1), true, 0);
-				data.draw(target, matrix, null, null, null, true);
-				data.lock();
-				
-				info.data = data;
-				frames[index - 1] = info;
+				if( (index - 1) % skip == 0 || index == totalFrames)
+				{
+					// 获取有效像素边框
+					target.gotoAndStop(index);
+					bounds = target.getBounds(target.parent);
+					
+					// 防抖、像素对齐优化
+					bounds.width = Math.ceil(bounds.width + bounds.x - (bounds.x >> 0));
+					bounds.height = Math.ceil(bounds.height + bounds.y - (bounds.y >> 0));
+					bounds.x >>= 0; bounds.y >>= 0;
+					
+					// 读取原生matrix, 适应任何变形对象
+					matrix = target.transform.matrix;
+					matrix.tx = -bounds.x + target.x;
+					matrix.ty = -bounds.y + target.y;
+					
+					info = new FrameInfo(matrix.tx, matrix.ty, data);
+					info.label = dict[index];
+					info.index = index;
+					
+					data = new BitmapData(Math.max(bounds.width, 1), Math.max(bounds.height, 1), true, 0);
+					data.draw(target, matrix, null, null, null, true);
+					data.lock();
+					
+					info.data = data;
+					frames[index - 1] = info;
+				}
 				
 				// 帧同步逻辑
 				var clips:Vector.<MovieClip> = collectChildren(target);
