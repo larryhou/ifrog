@@ -366,11 +366,11 @@ package ifrog.bitmap
 		 * 影片宽度
 		 * @notice	
 		 */
-		override public function get width():Number { return _width? _width : super.width; }
+		override public function get width():Number { return _width? _width * super.scaleX: super.width; }
 		
 		/**
 		 * 影片高度
 		 */
-		override public function get height():Number { return _height? _height : super.height; }
+		override public function get height():Number { return _height? _height * super.scaleY : super.height; }
 	}
 }
