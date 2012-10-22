@@ -81,7 +81,7 @@ package ifrog.bitmap
 				if (_numloop >= _loop && _loop > 0)
 				{
 					stop();
-					dispatchEvent(new Event(Event.COMPLETE, true));
+					dispatchEvent(new Event(Event.COMPLETE, true)); return;
 				}
 				
 			}
