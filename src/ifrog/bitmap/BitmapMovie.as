@@ -51,6 +51,8 @@ package ifrog.bitmap
 		private var _width:Number;
 		private var _height:Number;
 		
+		private var _delayFrames:int;
+		
 		/**
 		 * 构造函数
 		 * create a [BitmapMovie] object
@@ -70,6 +72,13 @@ package ifrog.bitmap
 		// 刷帧处理
 		public function advance(step:uint):void
 		{
+			if (_delayFrames > 0)
+			{
+				_delayFrames -= step; return;
+			}
+			
+			_delayFrames = 0;
+			
 			var frame:int = _currentFrame + step;
 			if (frame > _totalFrames)
 			{
@@ -372,5 +381,19 @@ package ifrog.bitmap
 		 * 影片高度
 		 */
 		override public function get height():Number { return _height? _height * super.scaleY : super.height; }
+		
+		/**
+		 * 延迟播放帧频
+		 * 
+		 * @default	1
+		 * @notice	默认值1是为了兼容RTBitmapPool情况
+		 * 因为RTBitmapPool是运行时绘制位图序列，BitmapMovie默认停留在第一帧，
+		 * 所以当RTBitmapPool绘制完第一帧时，BitmapMovie已播到第二帧，这样就会导致第一个循环没有视觉展现
+		 */
+		public function get delayFrames():int { return _delayFrames; }
+		public function set delayFrames(value:int):void 
+		{
+			_delayFrames = value;
+		}
 	}
 }
