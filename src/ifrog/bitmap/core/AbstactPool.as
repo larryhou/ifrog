@@ -51,7 +51,7 @@ package ifrog.bitmap.core
 			var map:Dictionary = _map;
 			if (key)
 			{
-				map = new Dictionary(false);
+				map = new Dictionary(true);
 				map[key] = _map[key];
 			}
 			
@@ -75,7 +75,7 @@ package ifrog.bitmap.core
 					info.data = null;
 				}
 				
-				delete map[key];
+				delete _map[key];
 			}
 		}
 		
