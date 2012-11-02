@@ -2,40 +2,41 @@ package ifrog.utils
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.utils.*;
+	import flash.utils.Dictionary;
 	
 	/**
 	 * 闹钟工具类
-	 * 设定一个时间，然后执行指定回调
-	 * 该工具类只适合精度为秒的计时需要，存在较大误差
-	 * 活动自动上下线、boss关冷却等等都比较适合该工具类做定时器
+	 * 设定在一个未来时间执行指定回调，只适合最小精度为秒的计时需要
 	 * 
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/7/24 14:47
 	 */
 	public class AlarmClock 
 	{
-		/**
-		 * 本地时间与服务器事件的差值：秒
-		 */
-		public static var TIME_OFFSET:int = 0;
-		
 		// 闹钟最大序号
-		private static var _sequence:uint;
-		private static var _timestamp:Number;
-		private static var _interval:uint;
+		private var _sequence:uint;
+		private var _timestamp:Number;
 		
-		private static const _helper:Sprite = new Sprite();
+		private var _queue:Array;
+		private var _interval:uint;		
+		private var _helper:Sprite;
 		
-		private static const _queue:Array = [];
-		private static const _map:Dictionary = new Dictionary();
+		private var _map:Dictionary;
+		
+		private var _timeOffset:int;
+		private var _suspended:Boolean;
 		
 		/**
-		 * 当前服务器时间
+		 * 构造函数
+		 * create a [AlarmClock] object
 		 */
-		public static function get now():uint
+		public function AlarmClock()
 		{
-			return (new Date().time / 1000 + TIME_OFFSET) >> 0;
+			_queue = [];
+			_helper = new Sprite();
+			_map = new Dictionary(false);
+			
+			_suspended = false;
 		}
 		
 		/**
@@ -44,17 +45,20 @@ package ifrog.utils
 		 * @param	callback	设定时间到需要执行的回调函数
 		 * @return	计时器唯一id，如果要终止倒计时，则需要保存该值
 		 */
-		public static function register(time:Number, callback:Function, params:Array = null):uint
+		public function register(time:Number, callback:Function, params:Array = null):uint
 		{
-			var current:Number = new Date().time / 1000 + TIME_OFFSET;
-			if (time <= current || callback == null) return 0;
+			var current:Number = new Date().time / 1000 + _timeOffset;
+			if (time <= current || callback == null)
+			{
+				callback && callback.apply(null, params); return 0;
+			}
 			
-			var item:AlarmItem = new AlarmItem(++_sequence, time - TIME_OFFSET, callback, params);
+			var item:AlarmItem = new AlarmItem(++_sequence, time - _timeOffset, callback, params);
 			
 			_map[item.id] = item;
 			_queue.push(item);
 			
-			if (!_helper.hasEventListener(Event.ENTER_FRAME))
+			if (!_helper.hasEventListener(Event.ENTER_FRAME) && !_suspended)
 			{
 				_helper.addEventListener(Event.ENTER_FRAME, update);
 			}
@@ -69,7 +73,7 @@ package ifrog.utils
 		 * 检查闹钟
 		 * 超低频率执行，高效率
 		 */
-		static private function update(e:Event = null):void 
+		private function update(e:Event = null):void 
 		{
 			var current:Number = new Date().time;
 			if (current - _timestamp < _interval) return;
@@ -123,7 +127,7 @@ package ifrog.utils
 		 * 清除闹钟
 		 * @param	id	闹钟唯一标识
 		 */
-		public static function unregister(id:uint):void
+		public function unregister(id:uint):void
 		{
 			if (_map[!id]) return;
 			
@@ -145,9 +149,9 @@ package ifrog.utils
 		}
 		
 		/**
-		 * 重置闹钟
+		 * 重置闹钟，该方法会清空所有计时项目
 		 */
-		public static function reset():void
+		public function reset():void
 		{
 			_queue.splice(0, _queue.length);
 			for (var key:* in _map) delete _map[key];
@@ -157,7 +161,44 @@ package ifrog.utils
 				_helper.removeEventListener(Event.ENTER_FRAME, update);
 			}
 		}
+
+		/**
+		 * 目标时间与本地系统时间差值
+		 * @default 0
+		 */		
+		public function get timeOffset():int { return _timeOffset; }
+		public function set timeOffset(value:int):void
+		{
+			_timeOffset = value;
+		}	
 		
+		/**
+		 * 当前目标时间
+		 */
+		public function get time():uint { return (new Date().time / 1000 + _timeOffset) >> 0; }
+
+		/**
+		 * 是否暂停计时器
+		 * @default false
+		 */		
+		public function get suspended():Boolean	{ return _suspended; }
+		public function set suspended(value:Boolean):void
+		{
+			_suspended = value;
+			if (_suspended)
+			{
+				if (_helper.hasEventListener(Event.ENTER_FRAME))
+				{
+					_helper.removeEventListener(Event.ENTER_FRAME, update);
+				}
+			}
+			else
+			if (_queue.length)
+			{
+				_helper.addEventListener(Event.ENTER_FRAME, update);
+			}
+		}
+
 	}
 
 }
