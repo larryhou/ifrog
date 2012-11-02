@@ -7,7 +7,7 @@ package ifrog.bitmap.core
 	
 	/**
 	 * 帧频节拍器
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 11:08
 	 */
 	public class RenderHelper 

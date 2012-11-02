@@ -10,7 +10,7 @@ package ifrog.bitmap.core
 	
 	/**
 	 * 位图池基类
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 20:23
 	 */
 	public class AbstactPool 

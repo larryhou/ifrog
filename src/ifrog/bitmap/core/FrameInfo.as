@@ -4,7 +4,7 @@ package ifrog.bitmap.core
 	
 	/**
 	 * 位图帧
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 11:28
 	 */
 	public class FrameInfo 

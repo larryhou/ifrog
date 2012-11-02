@@ -23,7 +23,7 @@ package ifrog.bitmap
 	
 	/**
 	 * 位图影片
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 11:30
 	 */
 	public class BitmapMovie extends Bitmap implements IAdvance

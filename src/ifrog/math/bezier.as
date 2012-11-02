@@ -4,7 +4,7 @@ package ifrog.math
 	
 	/**
 	 * 贝塞尔工具
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/8/21 16:24
 	 * 
 	 * 绘制贝赛尔曲线点

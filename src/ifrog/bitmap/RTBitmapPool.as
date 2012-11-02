@@ -14,7 +14,7 @@ package ifrog.bitmap
 	
 	/**
 	 * 运行时bitmap池
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 18:26
 	 */
 	public class RTBitmapPool extends AbstactPool implements IAdvance

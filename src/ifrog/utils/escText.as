@@ -4,7 +4,7 @@ package ifrog.utils
 	import flash.xml.XMLNodeType;
 	
 	/**
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/9/5 11:17
 	 * 
 	 * HTML特殊字符强力转义工具

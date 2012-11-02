@@ -8,7 +8,7 @@ package ifrog.cursors
 	
 	/**
 	 * 系统鼠标指针
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/9/11 10:33
 	 * @important  兼容10.0以上所有版本
 	 * 工具支持任意IBitmapDrawable(MovieClip、Sprite、Shape、Bitmap、BitmapData等)对象制作系统鼠标指针

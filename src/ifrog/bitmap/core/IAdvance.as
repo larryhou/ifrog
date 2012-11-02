@@ -3,7 +3,7 @@ package ifrog.bitmap.core
 	
 	/**
 	 * 依赖帧频渲染的类
-	 * @author Larry H.
+	 * @author larryhou
 	 * create a [IAdvance] interface
 	 */
 	public interface IAdvance

@@ -13,7 +13,7 @@ package ifrog.bitmap
 	/**
 	 * 位图池
 	 * @notice	之所以没有做成静态类，是为了bitmap动画分类管理
-	 * @author Larry H.
+	 * @author larryhou
 	 * @createTime 2012/5/23 12:08
 	 */
 	public class BitmapPool extends AbstactPool

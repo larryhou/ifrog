@@ -24,7 +24,7 @@ package ifrog.net
 	
 	/**
 	 * 图片加载器
-	 * @author Larry H.
+	 * @author larryhou
 	 */
 	public class ImageLoader extends EventDispatcher
 	{
