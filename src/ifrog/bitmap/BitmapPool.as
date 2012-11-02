@@ -41,7 +41,7 @@ package ifrog.bitmap
 			if (_map[key]) return _map[key] as Vector.<FrameInfo>;
 			
 			var totalFrames:int = target.totalFrames;
-			skip = Math.max(1, Math.min(totalFrames, skip)) + 1;
+			skip = Math.min(totalFrames, skip) + 1;
 			
 			var dict:Dictionary = createLabelMap(target);
 			var frames:Vector.<FrameInfo> = new Vector.<FrameInfo>(totalFrames, true);

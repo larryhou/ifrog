@@ -159,7 +159,7 @@ class RTItem
 		this.target = target;
 		this.totalFrames = totalFrames;
 		this.frames = new Vector.<FrameInfo>(totalFrames, true);
-		this.skip = Math.max(1, Math.min(totalFrames, skip)) + 1;
+		this.skip = Math.min(totalFrames, skip) + 1;
 		this.callback = callback;
 	}
 	
