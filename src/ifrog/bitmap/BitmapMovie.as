@@ -67,6 +67,7 @@ package ifrog.bitmap
 			
 			this.frameRate = 24;
 			this.frames = frames;
+			this.delayFrames = 1;
 		}
 		
 		// 刷帧处理
